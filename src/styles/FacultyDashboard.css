@@ -1,0 +1,114 @@
+.faculty-dashboard {
+  padding: 2rem;
+  background-color: #f5f6fa;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.section-title {
+  grid-column: 1 / -1;
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.function-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.function-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.function-icon {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.function-info {
+  flex: 1;
+}
+
+.function-title {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.function-description {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Section-specific colors */
+.course-section:hover {
+  border-left: 4px solid #3498db;
+}
+
+.attendance-section:hover {
+  border-left: 4px solid #2ecc71;
+}
+
+.grading-section:hover {
+  border-left: 4px solid #e74c3c;
+}
+
+.schedule-section:hover {
+  border-left: 4px solid #f1c40f;
+}
+
+.exam-section:hover {
+  border-left: 4px solid #9b59b6;
+}
+
+.feedback-section:hover {
+  border-left: 4px solid #1abc9c;
+}
+
+.profile-section:hover {
+  border-left: 4px solid #34495e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .faculty-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .function-card {
+    padding: 1rem;
+  }
+
+  .function-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+  }
+}
