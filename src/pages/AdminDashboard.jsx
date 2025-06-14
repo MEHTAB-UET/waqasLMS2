@@ -1,41 +1,39 @@
-import { useState } from "react";
-import "../styles/Dashboard.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/AdminDashboard.css";
+import DepartmentManagement from "./DepartmentManagement";
+import CourseManagement from "./CourseManagement";
+import StudentManagement from "./StudentManagement";
+import FacultyManagement from "./FacultyManagement";
 
-function AdminDashboard({ email, name, onLogout }) {
-  const getInitials = (name) => {
-    return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase();
-  };
+const AdminDashboard = ({ email, name, onLogout }) => {
+  const [currentView, setCurrentView] = useState(null);
+  const navigate = useNavigate();
 
   const academicFunctions = [
     {
       title: "Student Management",
-      description: "Add, view, update, and delete student records",
+      description: "Manage student records, enrollments, and academic progress",
       icon: "👥",
+      view: "student-management",
     },
     {
       title: "Faculty Management",
-      description: "Manage faculty members and their details",
+      description: "Manage faculty profiles, assignments, and schedules",
       icon: "👨‍🏫",
-    },
-    {
-      title: "Staff Management",
-      description: "Handle staff records and information",
-      icon: "👨‍💼",
+      view: "faculty-management",
     },
     {
       title: "Department Management",
-      description: "Organize and manage departments",
-      icon: "🏢",
+      description: "Manage academic departments and programs",
+      icon: "🏛️",
+      view: "department-management",
     },
     {
       title: "Course Management",
-      description: "Create and manage course offerings",
+      description: "Manage courses, assignments, and materials",
       icon: "📚",
+      view: "course-management",
     },
     {
       title: "Program Management",
@@ -72,107 +70,70 @@ function AdminDashboard({ email, name, onLogout }) {
     },
   ];
 
-  const supportFunctions = [
-    {
-      title: "Hostel Management",
-      description: "Manage hostel facilities and allocations",
-      icon: "🏠",
-    },
-    {
-      title: "Transport Management",
-      description: "Handle transportation services",
-      icon: "🚌",
-    },
-    {
-      title: "Document Management",
-      description: "Manage certificates and documents",
-      icon: "📄",
-    },
-    {
-      title: "Notifications",
-      description: "Send announcements and updates",
-      icon: "🔔",
-    },
-  ];
+  const handleFunctionClick = (view) => {
+    setCurrentView(view);
+  };
 
-  const systemFunctions = [
-    {
-      title: "Reports & Analytics",
-      description: "Generate reports and view statistics",
-      icon: "📈",
-    },
-    {
-      title: "Feedback & Evaluation",
-      description: "Manage faculty evaluations",
-      icon: "⭐",
-    },
-    {
-      title: "System Settings",
-      description: "Configure system preferences",
-      icon: "⚙️",
-    },
-  ];
+  const renderContent = () => {
+    switch (currentView) {
+      case "student-management":
+        return <StudentManagement />;
+      case "faculty-management":
+        return <FacultyManagement />;
+      case "department-management":
+        return <DepartmentManagement />;
+      case "course-management":
+        return <CourseManagement />;
+      default:
+        return (
+          <div className="admin-dashboard">
+            <header className="dashboard-header">
+              <div className="user-info">
+                <h2>Welcome, {name}</h2>
+                <p>{email}</p>
+              </div>
+              <button className="logout-btn" onClick={onLogout}>
+                Logout
+              </button>
+            </header>
 
-  return (
-    <div className="dashboard admin-dashboard">
-      <div className="dashboard-header">
-        <h1 className="dashboard-title">Admin Dashboard</h1>
-        <div className="user-profile">
-          <div className="profile-icon">{getInitials(name)}</div>
-          <span className="user-name">{name}</span>
-          <button onClick={onLogout} className="logout-btn">
-            Logout
-          </button>
-        </div>
-      </div>
+            <div className="dashboard-content">
+              <h1>Academic Management</h1>
+              <div className="function-grid">
+                {academicFunctions.map((func, index) => (
+                  <div
+                    key={index}
+                    className="function-card"
+                    onClick={() => handleFunctionClick(func.view)}
+                  >
+                    <div className="function-icon">{func.icon}</div>
+                    <h3>{func.title}</h3>
+                    <p>{func.description}</p>
+                  </div>
+                ))}
+              </div>
 
-      <div className="dashboard-grid">
-        <h2 className="section-title">Academic Management</h2>
-        {academicFunctions.map((func, index) => (
-          <div key={index} className="function-card academic-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
+              <h1>Administrative Management</h1>
+              <div className="function-grid">
+                {managementFunctions.map((func, index) => (
+                  <div
+                    key={index}
+                    className="function-card"
+                    onClick={() => handleFunctionClick(func.view)}
+                  >
+                    <div className="function-icon">{func.icon}</div>
+                    <h3>{func.title}</h3>
+                    <p>{func.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        ))}
+        );
+    }
+  };
 
-        <h2 className="section-title">Administrative Management</h2>
-        {managementFunctions.map((func, index) => (
-          <div key={index} className="function-card management-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-
-        <h2 className="section-title">Support Services</h2>
-        {supportFunctions.map((func, index) => (
-          <div key={index} className="function-card support-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-
-        <h2 className="section-title">System & Analytics</h2>
-        {systemFunctions.map((func, index) => (
-          <div key={index} className="function-card system-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+  return renderContent();
+};
 
 export default AdminDashboard;

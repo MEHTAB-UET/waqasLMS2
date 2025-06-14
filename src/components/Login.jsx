@@ -25,10 +25,14 @@ function Login({ onLogin }) {
       console.log("Server response:", data);
 
       if (!response.ok) {
-        throw new Error(data.error || "Login failed");
+        throw new Error(data.message || "Login failed");
       }
 
-      onLogin(data.role, data.email, data.name);
+      // Store user data in localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Call onLogin with the correct user data from the response
+      onLogin(data.user.role, data.user.email, data.user.name);
     } catch (error) {
       console.error("Login error:", error);
       setError(error.message);
