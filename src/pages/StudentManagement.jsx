@@ -22,6 +22,9 @@ const StudentManagement = () => {
   const fetchStudents = async () => {
     try {
       setLoading(true);
+      setError("");
+      console.log("Fetching students...");
+
       const response = await fetch("http://localhost:5000/api/students", {
         credentials: "include",
         headers: {
@@ -30,19 +33,23 @@ const StudentManagement = () => {
       });
 
       if (response.status === 401) {
-        // Redirect to login if unauthorized
+        console.log("Unauthorized, redirecting to login");
         window.location.href = "/login";
         return;
       }
 
       if (!response.ok) {
-        throw new Error("Failed to fetch students");
+        const errorData = await response.json();
+        console.error("Server error:", errorData);
+        throw new Error(errorData.message || "Failed to fetch students");
       }
 
       const data = await response.json();
+      console.log("Received students data:", data);
       setStudents(data);
     } catch (error) {
-      setError(error.message);
+      console.error("Error in fetchStudents:", error);
+      setError(error.message || "Failed to fetch students");
     } finally {
       setLoading(false);
     }
@@ -205,6 +212,11 @@ const StudentManagement = () => {
               <th>Department</th>
               <th>Program</th>
               <th>Semester</th>
+              <th>CGPA</th>
+              <th>Enrollment Date</th>
+              <th>Status</th>
+              <th>Contact</th>
+              <th>Address</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -216,6 +228,11 @@ const StudentManagement = () => {
                 <td>{student.department}</td>
                 <td>{student.program}</td>
                 <td>{student.semester}</td>
+                <td>{student.cgpa?.toFixed(2) || "N/A"}</td>
+                <td>{new Date(student.enrollmentDate).toLocaleDateString()}</td>
+                <td>{student.status}</td>
+                <td>{student.contactInfo?.phone || "N/A"}</td>
+                <td>{student.contactInfo?.address || "N/A"}</td>
                 <td>
                   <button
                     className="edit-btn"
@@ -228,6 +245,23 @@ const StudentManagement = () => {
                     onClick={() => handleDeleteStudent(student._id)}
                   >
                     Delete
+                  </button>
+                  <button
+                    className="view-courses-btn"
+                    onClick={() => {
+                      alert(
+                        `Enrolled Courses:\n${
+                          student.enrolledCourses
+                            ?.map(
+                              (course) =>
+                                `${course.courseCode}: ${course.courseName} (Grade: ${course.grade})`
+                            )
+                            .join("\n") || "No courses enrolled"
+                        }`
+                      );
+                    }}
+                  >
+                    View Courses
                   </button>
                 </td>
               </tr>
