@@ -158,10 +158,7 @@ const DepartmentManagement = () => {
       <div className="header">
         <h2>Department Management</h2>
         <div className="header-buttons">
-          <button
-            className="back-btn"
-            onClick={() => navigate("/admin-dashboard")}
-          >
+          <button className="back-btn" onClick={() => navigate("/dashboard")}>
             Back to Admin Dashboard
           </button>
           <button className="add-btn" onClick={() => setShowAddModal(true)}>

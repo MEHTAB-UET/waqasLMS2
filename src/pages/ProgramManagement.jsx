@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/StudentManagement.css";
+import "../styles/ProgramManagement.css";
 
-const StudentManagement = () => {
+const ProgramManagement = () => {
   const navigate = useNavigate();
-  const [students, setStudents] = useState([]);
+  const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedProgram, setSelectedProgram] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    code: "",
     department: "",
-    program: "BS Computer Science",
-    semester: 1,
+    duration: 4,
+    description: "",
   });
 
-  // Fetch students
-  const fetchStudents = async () => {
+  // Fetch programs
+  const fetchPrograms = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/students", {
+      const response = await fetch("http://localhost:5000/api/programs", {
         credentials: "include",
         headers: {
           Accept: "application/json",
@@ -30,17 +30,16 @@ const StudentManagement = () => {
       });
 
       if (response.status === 401) {
-        // Redirect to login if unauthorized
         window.location.href = "/login";
         return;
       }
 
       if (!response.ok) {
-        throw new Error("Failed to fetch students");
+        throw new Error("Failed to fetch programs");
       }
 
       const data = await response.json();
-      setStudents(data);
+      setPrograms(data);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -49,7 +48,7 @@ const StudentManagement = () => {
   };
 
   useEffect(() => {
-    fetchStudents();
+    fetchPrograms();
   }, []);
 
   // Handle form input changes
@@ -61,11 +60,11 @@ const StudentManagement = () => {
     }));
   };
 
-  // Add new student
-  const handleAddStudent = async (e) => {
+  // Add new program
+  const handleAddProgram = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/students", {
+      const response = await fetch("http://localhost:5000/api/programs", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -81,30 +80,30 @@ const StudentManagement = () => {
       }
 
       if (!response.ok) {
-        throw new Error("Failed to add student");
+        throw new Error("Failed to add program");
       }
 
       const data = await response.json();
-      setStudents([...students, data]);
+      setPrograms([...programs, data]);
       setShowAddModal(false);
       setFormData({
         name: "",
-        email: "",
+        code: "",
         department: "",
-        program: "BS Computer Science",
-        semester: 1,
+        duration: 4,
+        description: "",
       });
     } catch (error) {
       setError(error.message);
     }
   };
 
-  // Update student
-  const handleUpdateStudent = async (e) => {
+  // Update program
+  const handleUpdateProgram = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:5000/api/students/${selectedStudent._id}`,
+        `http://localhost:5000/api/programs/${selectedProgram._id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -122,13 +121,13 @@ const StudentManagement = () => {
       }
 
       if (!response.ok) {
-        throw new Error("Failed to update student");
+        throw new Error("Failed to update program");
       }
 
-      const updatedStudent = await response.json();
-      setStudents(
-        students.map((student) =>
-          student._id === updatedStudent._id ? updatedStudent : student
+      const updatedProgram = await response.json();
+      setPrograms(
+        programs.map((program) =>
+          program._id === updatedProgram._id ? updatedProgram : program
         )
       );
       setShowEditModal(false);
@@ -137,13 +136,13 @@ const StudentManagement = () => {
     }
   };
 
-  // Delete student
-  const handleDeleteStudent = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this student?"))
+  // Delete program
+  const handleDeleteProgram = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this program?"))
       return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/students/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/programs/${id}`, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -157,24 +156,24 @@ const StudentManagement = () => {
       }
 
       if (!response.ok) {
-        throw new Error("Failed to delete student");
+        throw new Error("Failed to delete program");
       }
 
-      setStudents(students.filter((student) => student._id !== id));
+      setPrograms(programs.filter((program) => program._id !== id));
     } catch (error) {
       setError(error.message);
     }
   };
 
   // Open edit modal
-  const handleEditClick = (student) => {
-    setSelectedStudent(student);
+  const handleEditClick = (program) => {
+    setSelectedProgram(program);
     setFormData({
-      name: student.name,
-      email: student.email,
-      department: student.department,
-      program: student.program,
-      semester: student.semester,
+      name: program.name,
+      code: program.code,
+      department: program.department,
+      duration: program.duration,
+      description: program.description,
     });
     setShowEditModal(true);
   };
@@ -183,49 +182,47 @@ const StudentManagement = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="student-management">
+    <div className="program-management">
       <div className="header">
-        <h2>Student Management</h2>
+        <h2>Program Management</h2>
         <div className="header-buttons">
           <button className="back-btn" onClick={() => navigate("/dashboard")}>
             Back to Dashboard
           </button>
           <button className="add-btn" onClick={() => setShowAddModal(true)}>
-            Add Student
+            Add Program
           </button>
         </div>
       </div>
 
-      <div className="students-table">
+      <div className="programs-list">
         <table>
           <thead>
             <tr>
+              <th>Code</th>
               <th>Name</th>
-              <th>Email</th>
               <th>Department</th>
-              <th>Program</th>
-              <th>Semester</th>
+              <th>Duration</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {students.map((student) => (
-              <tr key={student._id}>
-                <td>{student.name}</td>
-                <td>{student.email}</td>
-                <td>{student.department}</td>
-                <td>{student.program}</td>
-                <td>{student.semester}</td>
+            {programs.map((program) => (
+              <tr key={program._id}>
+                <td>{program.code}</td>
+                <td>{program.name}</td>
+                <td>{program.department}</td>
+                <td>{program.duration} years</td>
                 <td>
                   <button
                     className="edit-btn"
-                    onClick={() => handleEditClick(student)}
+                    onClick={() => handleEditClick(program)}
                   >
                     Edit
                   </button>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDeleteStudent(student._id)}
+                    onClick={() => handleDeleteProgram(program._id)}
                   >
                     Delete
                   </button>
@@ -236,12 +233,12 @@ const StudentManagement = () => {
         </table>
       </div>
 
-      {/* Add Student Modal */}
+      {/* Add Program Modal */}
       {showAddModal && (
         <div className="modal">
           <div className="modal-content">
-            <h2>Add New Student</h2>
-            <form onSubmit={handleAddStudent}>
+            <h3>Add New Program</h3>
+            <form onSubmit={handleAddProgram}>
               <div className="form-group">
                 <label>Name:</label>
                 <input
@@ -253,11 +250,11 @@ const StudentManagement = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Email:</label>
+                <label>Code:</label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="text"
+                  name="code"
+                  value={formData.code}
                   onChange={handleInputChange}
                   required
                 />
@@ -273,33 +270,28 @@ const StudentManagement = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Program:</label>
-                <select
-                  name="program"
-                  value={formData.program}
+                <label>Duration (years):</label>
+                <input
+                  type="number"
+                  name="duration"
+                  value={formData.duration}
                   onChange={handleInputChange}
-                >
-                  <option value="BS Computer Science">
-                    BS Computer Science
-                  </option>
-                </select>
+                  min="1"
+                  max="8"
+                  required
+                />
               </div>
               <div className="form-group">
-                <label>Semester:</label>
-                <select
-                  name="semester"
-                  value={formData.semester}
+                <label>Description:</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
                   onChange={handleInputChange}
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                    <option key={num} value={num}>
-                      Semester {num}
-                    </option>
-                  ))}
-                </select>
+                  required
+                />
               </div>
               <div className="modal-buttons">
-                <button type="submit">Add Student</button>
+                <button type="submit">Add Program</button>
                 <button type="button" onClick={() => setShowAddModal(false)}>
                   Cancel
                 </button>
@@ -309,12 +301,12 @@ const StudentManagement = () => {
         </div>
       )}
 
-      {/* Edit Student Modal */}
+      {/* Edit Program Modal */}
       {showEditModal && (
         <div className="modal">
           <div className="modal-content">
-            <h2>Edit Student</h2>
-            <form onSubmit={handleUpdateStudent}>
+            <h3>Edit Program</h3>
+            <form onSubmit={handleUpdateProgram}>
               <div className="form-group">
                 <label>Name:</label>
                 <input
@@ -326,11 +318,11 @@ const StudentManagement = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Email:</label>
+                <label>Code:</label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="text"
+                  name="code"
+                  value={formData.code}
                   onChange={handleInputChange}
                   required
                 />
@@ -346,33 +338,28 @@ const StudentManagement = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Program:</label>
-                <select
-                  name="program"
-                  value={formData.program}
+                <label>Duration (years):</label>
+                <input
+                  type="number"
+                  name="duration"
+                  value={formData.duration}
                   onChange={handleInputChange}
-                >
-                  <option value="BS Computer Science">
-                    BS Computer Science
-                  </option>
-                </select>
+                  min="1"
+                  max="8"
+                  required
+                />
               </div>
               <div className="form-group">
-                <label>Semester:</label>
-                <select
-                  name="semester"
-                  value={formData.semester}
+                <label>Description:</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
                   onChange={handleInputChange}
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                    <option key={num} value={num}>
-                      Semester {num}
-                    </option>
-                  ))}
-                </select>
+                  required
+                />
               </div>
               <div className="modal-buttons">
-                <button type="submit">Update Student</button>
+                <button type="submit">Update Program</button>
                 <button type="button" onClick={() => setShowEditModal(false)}>
                   Cancel
                 </button>
@@ -385,4 +372,4 @@ const StudentManagement = () => {
   );
 };
 
-export default StudentManagement;
+export default ProgramManagement;

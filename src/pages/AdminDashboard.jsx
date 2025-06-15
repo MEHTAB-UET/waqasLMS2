@@ -5,6 +5,7 @@ import DepartmentManagement from "./DepartmentManagement";
 import CourseManagement from "./CourseManagement";
 import StudentManagement from "./StudentManagement";
 import FacultyManagement from "./FacultyManagement";
+import ProgramManagement from "./ProgramManagement";
 
 const AdminDashboard = ({ email, name, onLogout }) => {
   const [currentView, setCurrentView] = useState(null);
@@ -39,6 +40,7 @@ const AdminDashboard = ({ email, name, onLogout }) => {
       title: "Program Management",
       description: "Manage academic programs and degrees",
       icon: "🎓",
+      view: "program-management",
     },
   ];
 
@@ -84,6 +86,8 @@ const AdminDashboard = ({ email, name, onLogout }) => {
         return <DepartmentManagement />;
       case "course-management":
         return <CourseManagement />;
+      case "program-management":
+        return <ProgramManagement />;
       default:
         return (
           <div className="admin-dashboard">

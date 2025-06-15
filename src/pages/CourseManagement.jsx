@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../styles/CourseManagement.css";
+import { useNavigate } from "react-router-dom";
 
 const CourseManagement = () => {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -179,6 +181,9 @@ const CourseManagement = () => {
     <div className="course-management">
       <div className="header">
         <h2>Course Management</h2>
+        <button className="back-btn" onClick={() => navigate("/dashboard")}>
+          Back to Admin Dashboard
+        </button>
         <button className="add-btn" onClick={() => setShowAddModal(true)}>
           Add New Course
         </button>
