@@ -43,14 +43,10 @@ function FacultyDashboard() {
       onClick: () => navigate(`/assigned-courses/${facultyId}`),
     },
     {
-      title: "Upload Course Materials",
-      description: "Upload lecture notes, assignments, and resources",
-      icon: "📝",
-    },
-    {
       title: "Manage Assignments",
       description: "Create and manage course assignments",
       icon: "📋",
+      onClick: () => navigate("/manage-assignments"),
     },
   ];
 
@@ -77,58 +73,6 @@ function FacultyDashboard() {
       title: "Grade Reports",
       description: "View and generate grade reports",
       icon: "📑",
-    },
-  ];
-
-  const scheduleFunctions = [
-    {
-      title: "Class Timetable",
-      description: "View your teaching schedule",
-      icon: "🕒",
-    },
-    {
-      title: "Exam Schedule",
-      description: "View upcoming exam schedules",
-      icon: "📅",
-    },
-  ];
-
-  const examFunctions = [
-    {
-      title: "Submit Exam Papers",
-      description: "Upload and manage exam papers",
-      icon: "📄",
-    },
-    {
-      title: "View Past Papers",
-      description: "Access previous exam papers",
-      icon: "📚",
-    },
-  ];
-
-  const feedbackFunctions = [
-    {
-      title: "Student Feedback",
-      description: "View feedback from your students",
-      icon: "💬",
-    },
-    {
-      title: "Course Reviews",
-      description: "View course evaluations and reviews",
-      icon: "⭐",
-    },
-  ];
-
-  const profileFunctions = [
-    {
-      title: "Update Profile",
-      description: "Manage your personal information",
-      icon: "👤",
-    },
-    {
-      title: "Change Password",
-      description: "Update your account password",
-      icon: "🔒",
     },
   ];
 
@@ -173,50 +117,6 @@ function FacultyDashboard() {
         <h2 className="section-title">Grading System</h2>
         {gradingFunctions.map((func, index) => (
           <div key={index} className="function-card grading-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-
-        <h2 className="section-title">Schedule Management</h2>
-        {scheduleFunctions.map((func, index) => (
-          <div key={index} className="function-card schedule-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-
-        <h2 className="section-title">Exam Management</h2>
-        {examFunctions.map((func, index) => (
-          <div key={index} className="function-card exam-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-
-        <h2 className="section-title">Feedback & Reviews</h2>
-        {feedbackFunctions.map((func, index) => (
-          <div key={index} className="function-card feedback-section">
-            <div className="function-icon">{func.icon}</div>
-            <div className="function-info">
-              <h3 className="function-title">{func.title}</h3>
-              <p className="function-description">{func.description}</p>
-            </div>
-          </div>
-        ))}
-
-        <h2 className="section-title">Profile Settings</h2>
-        {profileFunctions.map((func, index) => (
-          <div key={index} className="function-card profile-section">
             <div className="function-icon">{func.icon}</div>
             <div className="function-info">
               <h3 className="function-title">{func.title}</h3>

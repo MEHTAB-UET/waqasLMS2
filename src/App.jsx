@@ -13,6 +13,7 @@ import StudentManagement from "./pages/StudentManagement";
 import FacultyManagement from "./pages/FacultyManagement";
 import DepartmentManagement from "./pages/DepartmentManagement";
 import AssignedCourses from "./pages/AssignedCourses";
+import ManageAssignments from "./pages/ManageAssignments";
 import "./App.css";
 
 function App() {
@@ -180,6 +181,18 @@ function App() {
                   name={userName}
                   onLogout={handleLogout}
                 />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Manage Assignments Route */}
+          <Route
+            path="/manage-assignments"
+            element={
+              userRole === "faculty" ? (
+                <ManageAssignments />
               ) : (
                 <Navigate to="/login" replace />
               )
