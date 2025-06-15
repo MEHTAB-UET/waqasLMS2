@@ -32,6 +32,9 @@ const StudentManagement = () => {
         },
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
       if (response.status === 401) {
         console.log("Unauthorized, redirecting to login");
         window.location.href = "/login";
@@ -46,9 +49,11 @@ const StudentManagement = () => {
 
       const data = await response.json();
       console.log("Received students data:", data);
+      console.log("Number of students:", data.length);
       setStudents(data);
     } catch (error) {
       console.error("Error in fetchStudents:", error);
+      console.error("Error stack:", error.stack);
       setError(error.message || "Failed to fetch students");
     } finally {
       setLoading(false);
