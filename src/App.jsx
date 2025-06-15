@@ -14,6 +14,7 @@ import FacultyManagement from "./pages/FacultyManagement";
 import DepartmentManagement from "./pages/DepartmentManagement";
 import AssignedCourses from "./pages/AssignedCourses";
 import ManageAssignments from "./pages/ManageAssignments";
+import EnrolledCourses from "./pages/EnrolledCourses";
 import "./App.css";
 
 function App() {
@@ -205,6 +206,18 @@ function App() {
             element={
               userRole === "faculty" ? (
                 <AssignedCourses />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Enrolled Courses Route */}
+          <Route
+            path="/enrolled-courses/:studentId"
+            element={
+              userRole === "student" ? (
+                <EnrolledCourses />
               ) : (
                 <Navigate to="/login" replace />
               )

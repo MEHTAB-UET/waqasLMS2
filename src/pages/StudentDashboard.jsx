@@ -1,8 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/Dashboard.css";
 import "../styles/StudentDashboard.css";
+import { useNavigate } from "react-router-dom";
 
 function StudentDashboard({ email, name, onLogout }) {
+  const [studentId, setStudentId] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStudentProfile = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/profile", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setStudentId(data.id);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchStudentProfile();
+  }, []);
+
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -16,6 +38,7 @@ function StudentDashboard({ email, name, onLogout }) {
       title: "View Enrolled Courses",
       description: "Access your current course list and details",
       icon: "📚",
+      onClick: () => navigate(`/enrolled-courses/${studentId}`),
     },
     {
       title: "Class Timetable",
@@ -135,7 +158,12 @@ function StudentDashboard({ email, name, onLogout }) {
       <div className="dashboard-grid">
         <h2 className="section-title">Academic Overview</h2>
         {academicFunctions.map((func, index) => (
-          <div key={index} className="function-card academic-section">
+          <div
+            key={index}
+            className="function-card academic-section"
+            onClick={func.onClick}
+            style={{ cursor: func.onClick ? "pointer" : "default" }}
+          >
             <div className="function-icon">{func.icon}</div>
             <div className="function-info">
               <h3 className="function-title">{func.title}</h3>
