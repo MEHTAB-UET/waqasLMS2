@@ -6,6 +6,7 @@ import CourseManagement from "./CourseManagement";
 import StudentManagement from "./StudentManagement";
 import FacultyManagement from "./FacultyManagement";
 import ProgramManagement from "./ProgramManagement";
+import AdmissionManagement from "./AdmissionManagement";
 
 const AdminDashboard = ({ email, name, onLogout }) => {
   const [currentView, setCurrentView] = useState(null);
@@ -42,33 +43,50 @@ const AdminDashboard = ({ email, name, onLogout }) => {
       icon: "🎓",
       view: "program-management",
     },
+    {
+      title: "Admission Management",
+      description: "Manage student admissions and applications",
+      icon: "📝",
+      view: "admission-management",
+    },
   ];
 
   const managementFunctions = [
     {
-      title: "Admission Management",
-      description: "Process and track student admissions",
-      icon: "📝",
-    },
-    {
-      title: "Timetable Scheduling",
-      description: "Create and manage class schedules",
-      icon: "📅",
-    },
-    {
-      title: "Examination Management",
-      description: "Handle exams and assessments",
-      icon: "✍️",
-    },
-    {
-      title: "Result Management",
-      description: "Process and publish academic results",
+      title: "Attendance Management",
+      description: "Track and manage student and faculty attendance",
       icon: "📊",
+      view: "attendance-management",
     },
     {
-      title: "Fee & Finance",
-      description: "Manage fees, payments, and finances",
+      title: "Fee Management",
+      description: "Manage student fees, payments, and financial records",
       icon: "💰",
+      view: "fee-management",
+    },
+    {
+      title: "Exam Management",
+      description: "Schedule and manage exams, results, and grading",
+      icon: "📝",
+      view: "exam-management",
+    },
+    {
+      title: "Library Management",
+      description: "Manage library resources, books, and borrowing",
+      icon: "📚",
+      view: "library-management",
+    },
+    {
+      title: "Hostel Management",
+      description: "Manage hostel facilities, rooms, and residents",
+      icon: "🏠",
+      view: "hostel-management",
+    },
+    {
+      title: "Transport Management",
+      description: "Manage transportation services and routes",
+      icon: "🚌",
+      view: "transport-management",
     },
   ];
 
@@ -88,6 +106,8 @@ const AdminDashboard = ({ email, name, onLogout }) => {
         return <CourseManagement />;
       case "program-management":
         return <ProgramManagement />;
+      case "admission-management":
+        return <AdmissionManagement />;
       default:
         return (
           <div className="admin-dashboard">
