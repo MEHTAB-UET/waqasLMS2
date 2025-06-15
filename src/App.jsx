@@ -12,6 +12,7 @@ import FacultyDashboard from "./pages/FacultyDashboard";
 import StudentManagement from "./pages/StudentManagement";
 import FacultyManagement from "./pages/FacultyManagement";
 import DepartmentManagement from "./pages/DepartmentManagement";
+import AssignedCourses from "./pages/AssignedCourses";
 import "./App.css";
 
 function App() {
@@ -179,6 +180,18 @@ function App() {
                   name={userName}
                   onLogout={handleLogout}
                 />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Assigned Courses Route */}
+          <Route
+            path="/assigned-courses/:facultyId"
+            element={
+              userRole === "faculty" ? (
+                <AssignedCourses />
               ) : (
                 <Navigate to="/login" replace />
               )

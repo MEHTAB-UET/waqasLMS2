@@ -1,8 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
 import "../styles/FacultyDashboard.css";
 
-function FacultyDashboard({ email, name, onLogout }) {
+function FacultyDashboard() {
+  const [name, setName] = useState("");
+  const [facultyId, setFacultyId] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/profile", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setName(data.name);
+          setFacultyId(data.id);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -16,6 +40,7 @@ function FacultyDashboard({ email, name, onLogout }) {
       title: "View Assigned Courses",
       description: "View and manage your course assignments",
       icon: "📚",
+      onClick: () => navigate(`/assigned-courses/${facultyId}`),
     },
     {
       title: "Upload Course Materials",
@@ -114,16 +139,18 @@ function FacultyDashboard({ email, name, onLogout }) {
         <div className="user-profile">
           <div className="profile-icon">{getInitials(name)}</div>
           <span className="user-name">{name}</span>
-          <button onClick={onLogout} className="logout-btn">
-            Logout
-          </button>
         </div>
       </div>
 
       <div className="dashboard-grid">
         <h2 className="section-title">Course Management</h2>
         {courseManagementFunctions.map((func, index) => (
-          <div key={index} className="function-card course-section">
+          <div
+            key={index}
+            className="function-card course-section"
+            onClick={func.onClick}
+            style={{ cursor: func.onClick ? "pointer" : "default" }}
+          >
             <div className="function-icon">{func.icon}</div>
             <div className="function-info">
               <h3 className="function-title">{func.title}</h3>
